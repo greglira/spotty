@@ -2,7 +2,7 @@ remote_theme: pmarsceill/just-the-docs@v0.1.6
 
 title: Spotty
 description: ''
-baseurl: '/spotty'
+baseurl: ''
 url: ''
 
 # build settings
@@ -14,8 +14,8 @@ plugins:
 # the theme settings
 search_enabled: true
 aux_links:
-    GitHub:
-      - https://github.com/apls777/spotty
+  GitHub:
+    - https://github.com/apls777/spotty
 
 webrick:
   headers:
