@@ -27,6 +27,7 @@ def validate_instance_parameters(params: dict):
                                                                         'should  not be specified.'),
                                              ),
         Optional('managedPolicyArns', default=[]): [str],
+        Optional('ingressCidr', default=[]): [str],
     }
 
     volumes_checks = [

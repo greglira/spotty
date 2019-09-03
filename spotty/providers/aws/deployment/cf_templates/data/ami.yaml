@@ -318,19 +318,11 @@ Resources:
           IpProtocol: -1
           FromPort: 0
           ToPort: 65535
-        - CidrIpv6: ::/0
-          IpProtocol: -1
-          FromPort: 0
-          ToPort: 65535
       SecurityGroupIngress:
-        - CidrIp: 0.0.0.0/0
+        - CidrIp: 0.0.0.0/32
           IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-        - CidrIpv6: ::/0
-          IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
+          FromPort: 1
+          ToPort: 1
 
   InstanceReadyWaitCondition:
     Type: AWS::CloudFormation::WaitCondition

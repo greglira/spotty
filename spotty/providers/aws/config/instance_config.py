@@ -25,6 +25,10 @@ class InstanceConfig(AbstractInstanceConfig):
         return self._params['subnetId']
 
     @property
+    def instance_locations(self) -> list:
+        return self._params['instanceLocations']
+
+    @property
     def instance_type(self) -> str:
         return self._params['instanceType']
 
@@ -55,3 +59,7 @@ class InstanceConfig(AbstractInstanceConfig):
     @property
     def managed_policy_arns(self) -> list:
         return self._params['managedPolicyArns']
+
+    @property
+    def ingress_cidr(self):
+        return self._params['ingressCidr']

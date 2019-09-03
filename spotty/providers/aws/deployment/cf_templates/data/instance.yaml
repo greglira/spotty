@@ -105,6 +105,7 @@ Resources:
         UserData:
           'Fn::Base64': !Sub |
             #!/bin/bash -x
+            exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 
             cd /root
 
@@ -323,21 +324,17 @@ Resources:
           FromPort: 0
           ToPort: 65535
       SecurityGroupIngress:
-        - CidrIp: 0.0.0.0/0
+        - CidrIp: 0.0.0.0/32
           IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-        - CidrIpv6: ::/0
-          IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
+          FromPort: 1
+          ToPort: 1
 
   DockerReadyWaitCondition:
     Type: AWS::CloudFormation::WaitCondition
     DependsOn: Instance
     CreationPolicy:
       ResourceSignal:
-        Timeout: PT30M
+        Timeout: PT60M
 
 Outputs:
   InstanceId:

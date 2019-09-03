@@ -1,6 +1,7 @@
 from typing import List
 import os
 import yaml
+import itertools
 from cfn_tools import CfnYamlLoader, CfnYamlDumper
 from spotty.commands.writers.abstract_output_writrer import AbstractOutputWriter
 from spotty.deployment.abstract_instance_volume import AbstractInstanceVolume
@@ -44,19 +45,13 @@ def prepare_instance_template(instance_config: InstanceConfig, volumes: List[Abs
         del template['Resources']['InstanceLaunchTemplate']['Properties']['LaunchTemplateData']['SecurityGroupIds']
 
     # add ports to the security group
-    for port in container.config.ports:
-        if port != 22:
-            template['Resources']['InstanceSecurityGroup']['Properties']['SecurityGroupIngress'] += [{
-                'CidrIp': '0.0.0.0/0',
-                'IpProtocol': 'tcp',
-                'FromPort': port,
-                'ToPort': port,
-            }, {
-                'CidrIpv6': '::/0',
-                'IpProtocol': 'tcp',
-                'FromPort': port,
-                'ToPort': port,
-            }]
+    for port, cidr in list(itertools.product(container.config.ports, instance_config.ingress_cidr)):
+        template['Resources']['InstanceSecurityGroup']['Properties']['SecurityGroupIngress'] += [{
+            'CidrIp': cidr,
+            'IpProtocol': 'tcp',
+            'FromPort': port,
+            'ToPort': port,
+        }]
 
     if instance_config.on_demand:
         # run on-demand instance
