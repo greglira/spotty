@@ -24,8 +24,12 @@ def sync_instance_with_s3(sync_filters: list, host: str, port: int, user: str, k
     # "sudo" should be called with the "-i" flag to use the root environment, so aws-cli will read
     # the config file from the root home directory
     remote_cmd = subprocess.list2cmdline(['sudo', '-i', '/tmp/spotty/instance/scripts/sync_project.sh',
-                                          *get_instance_sync_arguments(sync_filters), '>', '/dev/null'])
+                                          *get_instance_sync_arguments(sync_filters)])
 
     # connect to the instance and run remote command
-    ssh_command = get_ssh_command(host, port, user, key_path, remote_cmd, quiet=True)
-    subprocess.call(ssh_command)
+    ssh_command = get_ssh_command(host, port, user, key_path, remote_cmd, quiet=False)
+    try:
+        output = subprocess.check_output(ssh_command)
+        print("Sync cmd output (remote host): " + output)
+    except subprocess.CalledProcessError as e:
+        print(f"Process error when copying to the instance: \n{e.output}")
