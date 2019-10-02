@@ -22,13 +22,21 @@ and [GCP Preemtible VMs](https://cloud.google.com/preemptible-vms/)
 article on Medium for a real-world example.
 
 ## Installation
-
 Requirements:
   * Python >=3.5
   * AWS CLI (see [Installing the AWS Command Line Interface](http://docs.aws.amazon.com/cli/latest/userguide/installing.html)) 
   if you're using AWS
   * Google Cloud SDK (see [Installing Google Cloud SDK](https://cloud.google.com/sdk/install)) 
   if you're using GCP
+
+### Building from source
+
+Go to the root folder of this repository
+Run the following command:
+
+    $ pip install .
+
+### Installing the PyPI version
 
 Use [pip](http://www.pip-installer.org/en/latest/) to install or upgrade Spotty:
 
