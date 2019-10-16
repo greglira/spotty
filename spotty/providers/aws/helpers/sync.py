@@ -30,6 +30,6 @@ def sync_instance_with_s3(sync_filters: list, host: str, port: int, user: str, k
     ssh_command = get_ssh_command(host, port, user, key_path, remote_cmd, quiet=False)
     try:
         output = subprocess.check_output(ssh_command)
-        print("Sync cmd output (remote host): " + output)
+        print(f"Sync cmd output (remote host): {str(output)}")
     except subprocess.CalledProcessError as e:
-        print(f"Process error when copying to the instance: \n{e.output}")
+        print(f"Process error when copying to the instance: \n{str(e.output)}")
