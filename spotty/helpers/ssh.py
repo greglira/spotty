@@ -3,7 +3,7 @@ import subprocess
 
 
 def get_ssh_command(host: str, port: int, user: str, key_path: str, remote_cmd: str, quiet: bool = False) -> list:
-    ssh_command = ['ssh', '-tt', '-i', key_path, '-o', 'StrictHostKeyChecking no']
+    ssh_command = ['ssh', '-t', '-i', key_path, '-o', 'StrictHostKeyChecking no']
 
     if port != 22:
         ssh_command += ['-p', str(port)]
@@ -17,7 +17,7 @@ def get_ssh_command(host: str, port: int, user: str, key_path: str, remote_cmd: 
 
 
 def run_script(host: str, port: int, user: str, key_path: str, script_name: str, script_content: str,
-               tmux_session_name: str, restart: bool = False, logging: bool = False):
+               tmux_session_name: str, restart: bool = False, logging: bool = False, non_interactive=False):
     # encode the script content to base64
     script_base64 = base64.b64encode(script_content.encode('utf-8')).decode('utf-8')
 
@@ -47,15 +47,19 @@ def run_script(host: str, port: int, user: str, key_path: str, script_name: str,
     new_session_cmd = subprocess.list2cmdline(['tmux', 'new', '-s', tmux_session_name, '-n', script_name,
                                                'tmux set remain-on-exit on && %s' % docker_cmd])
 
-    if restart:
-        # composition of the commands: killing the script session if it already exists, then uploading the script
-        # to the instance, creating new tmux session and running the script inside the Docker container
-        remote_cmd = '%s; (%s && %s)' % (kill_session_cmd, upload_script_cmd, new_session_cmd)
+    # Handle non-interactive mode as well, when we just need to run dockerized workload automatically
+    if non_interactive:
+        remote_cmd = "%s && %s" % (upload_script_cmd, docker_cmd)
     else:
-        # composition of the commands: trying to attach the user to the existing tmux session. If it doesn't exist,
-        # uploading the user script to the instance, creating new tmux session and running that script
-        # inside the Docker container
-        remote_cmd = '%s || (%s && %s)' % (attach_session_cmd, upload_script_cmd, new_session_cmd)
+        if restart:
+            # composition of the commands: killing the script session if it already exists, then uploading the script
+            # to the instance, creating new tmux session and running the script inside the Docker container
+            remote_cmd = '%s; (%s && %s)' % (kill_session_cmd, upload_script_cmd, new_session_cmd)
+        else:
+            # composition of the commands: trying to attach the user to the existing tmux session. If it doesn't exist,
+            # uploading the user script to the instance, creating new tmux session and running that script
+            # inside the Docker container
+            remote_cmd = '%s || (%s && %s)' % (attach_session_cmd, upload_script_cmd, new_session_cmd)
 
     # connect to the instance and run the command
     ssh_command = get_ssh_command(host, port, user, key_path, remote_cmd)

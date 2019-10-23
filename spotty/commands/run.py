@@ -19,6 +19,8 @@ class RunCommand(AbstractConfigCommand):
         parser.add_argument('-l', '--logging', action='store_true', help='Log the script outputs to the file')
         parser.add_argument('-r', '--restart', action='store_true',
                             help='Restart the script (kills previous session if it exists)')
+        parser.add_argument('-t', '--non_tmux', action='store_true',
+                            help='Use non-interactive mode (run without tmux)')
         parser.add_argument('script_name', metavar='SCRIPT_NAME', type=str, help='Script name')
         parser.add_argument('-p', '--parameter', metavar='PARAMETER=VALUE', action='append', type=str, default=[],
                             help='Set the value for a script parameter (you can use this argument multiple times '
@@ -55,4 +57,5 @@ class RunCommand(AbstractConfigCommand):
                    script_content=script_content,
                    tmux_session_name=session_name,
                    restart=args.restart,
-                   logging=args.logging)
+                   logging=args.logging,
+                   non_interactive=args.non_tmux)
