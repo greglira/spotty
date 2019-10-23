@@ -3,7 +3,7 @@ import subprocess
 
 
 def get_ssh_command(host: str, port: int, user: str, key_path: str, remote_cmd: str, quiet: bool = False) -> list:
-    ssh_command = ['ssh', '-ti', key_path, '-o', 'StrictHostKeyChecking no']
+    ssh_command = ['ssh', '-tt', '-i', key_path, '-o', 'StrictHostKeyChecking no']
 
     if port != 22:
         ssh_command += ['-p', str(port)]
