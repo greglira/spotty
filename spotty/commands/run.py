@@ -21,6 +21,8 @@ class RunCommand(AbstractConfigCommand):
                             help='Restart the script (kills previous session if it exists)')
         parser.add_argument('-t', '--non_tmux', action='store_true',
                             help='Use non-interactive mode (run without tmux)')
+        parser.add_argument('-i', '--use_internal_ip', action='store_true',
+                            help='Use internal IPv4 address')
         parser.add_argument('script_name', metavar='SCRIPT_NAME', type=str, help='Script name')
         parser.add_argument('-p', '--parameter', metavar='PARAMETER=VALUE', action='append', type=str, default=[],
                             help='Set the value for a script parameter (you can use this argument multiple times '
@@ -48,8 +50,10 @@ class RunCommand(AbstractConfigCommand):
         # tmux session name
         session_name = args.session_name if args.session_name else 'spotty-script-%s' % script_name
 
+        ip_address = instance_manager.get_private_ip_address() if args.use_internal_ip \
+            else instance_manager.get_ip_address()
         # run the script on the instance
-        run_script(host=instance_manager.get_ip_address(),
+        run_script(host=ip_address,
                    port=instance_manager.ssh_port,
                    user=instance_manager.ssh_user,
                    key_path=instance_manager.ssh_key_path,

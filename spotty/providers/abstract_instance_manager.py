@@ -58,6 +58,11 @@ class AbstractInstanceManager(ABC):
         """Returns a public IP address of the running instance."""
         raise NotImplementedError
 
+    @abstractmethod
+    def get_private_ip_address(self) -> str:
+        """Returns a private (internal) IP address of the running instance."""
+        raise NotImplementedError
+
     def get_ip_address(self):
         """Returns an IP address that will be used for SSH connections."""
         if self._instance_config.local_ssh_port:

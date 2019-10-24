@@ -123,6 +123,14 @@ class InstanceManager(AbstractInstanceManager):
 
         return instance.public_ip_address
 
+    def get_private_ip_address(self):
+        """Returns a private IP address of the running instance."""
+        instance = self.instance_deployment.get_instance()
+        if not instance:
+            raise InstanceNotRunningError(self.instance_config.name)
+
+        return instance.private_ip_address
+
     @property
     def ssh_user(self):
         return 'ubuntu'
