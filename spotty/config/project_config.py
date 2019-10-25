@@ -1,6 +1,6 @@
 from spotty.config.container_config import ContainerConfig
 from spotty.config.validation import validate_basic_config
-from spotty.utils import filter_list
+import os
 import getpass
 
 
@@ -20,9 +20,12 @@ class ProjectConfig(object):
 
     @property
     def project_name(self) -> str:
-        # Include username
-        username = getpass.getuser()
-        return self._config['project']['name'] + '-' + username
+        project_suffix = os.environ.get("SPOTTY_PROJECT_SUFFIX")
+        if project_suffix is None:
+            # Setting username as a project suffix to avoid conflicts (if no env var is available)
+            project_suffix = getpass.getuser()
+
+        return self._config['project']['name'] + '-' + project_suffix
 
     @property
     def sync_filters(self) -> list:
