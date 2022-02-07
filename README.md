@@ -1,4 +1,4 @@
-<img src="https://spotty.cloud/assets/images/logo_740x240.png" width="370" height="120" />
+<img src="https://spotty.cloud/_static/images/logo_740x240.png" width="370" height="120" />
 
 [![Documentation](https://img.shields.io/badge/documentation-reference-brightgreen.svg)](https://spotty.cloud)
 [![PyPI](https://img.shields.io/pypi/v/spotty.svg)](https://pypi.org/project/spotty/)
@@ -23,7 +23,7 @@ article on Medium for a real-world example.
 
 ## Installation
 Requirements:
-  * Python >=3.5
+  * Python >=3.6
   * AWS CLI (see [Installing the AWS Command Line Interface](http://docs.aws.amazon.com/cli/latest/userguide/installing.html)) 
   if you're using AWS
   * Google Cloud SDK (see [Installing Google Cloud SDK](https://cloud.google.com/sdk/install)) 
@@ -46,7 +46,7 @@ Use [pip](http://www.pip-installer.org/en/latest/) to install or upgrade Spotty:
 
 1. Prepare a `spotty.yaml` file and put it to the root directory of your project:
 
-   - See the file specification [here](https://spotty.cloud/docs/configuration-file/).
+   - See the file specification [here](https://spotty.cloud/docs/user-guide/configuration-file.html).
    - Read [this](https://medium.com/@apls/how-to-train-deep-learning-models-on-aws-spot-instances-using-spotty-8d9e0543d365) 
    article for a real-world example.
 
@@ -64,12 +64,12 @@ Use [pip](http://www.pip-installer.org/en/latest/) to install or upgrade Spotty:
     To connect to the running container via SSH, use the following command:
 
     ```bash
-    $ spotty ssh
+    $ spotty sh
     ```
 
     It runs a [tmux](https://github.com/tmux/tmux/wiki) session, so you can always detach this session using
     __`Ctrl + b`__, then __`d`__ combination of keys. To be attached to that session later, just use the
-    `spotty ssh` command again.
+    `spotty sh` command again.
 
     Also, you can run your custom scripts inside the Docker container using the `spotty run <SCRIPT_NAME>` command. Read more
     about custom scripts in the documentation: 
